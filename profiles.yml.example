@@ -1,0 +1,56 @@
+# Example profiles.yml configuration
+# Copy this to ~/.dbt/profiles.yml and configure with your warehouse credentials
+
+spotify_analytics:
+  target: dev
+  outputs:
+    dev:
+      # Snowflake example
+      type: snowflake
+      account: your_account
+      user: your_username
+      password: your_password
+      role: your_role
+      database: your_database
+      warehouse: your_warehouse
+      schema: spotify_analytics_dev
+      threads: 4
+      
+      # BigQuery example (comment out Snowflake section above and uncomment this)
+      # type: bigquery
+      # method: oauth
+      # project: your_project_id
+      # dataset: spotify_analytics_dev
+      # threads: 4
+      # location: US
+      
+      # Redshift example (comment out Snowflake section above and uncomment this)
+      # type: redshift
+      # host: your-cluster.region.redshift.amazonaws.com
+      # user: your_username
+      # password: your_password
+      # port: 5439
+      # dbname: your_database
+      # schema: spotify_analytics_dev
+      # threads: 4
+      
+      # PostgreSQL example (comment out Snowflake section above and uncomment this)
+      # type: postgres
+      # host: your_host
+      # user: your_username
+      # password: your_password
+      # port: 5432
+      # dbname: your_database
+      # schema: spotify_analytics_dev
+      # threads: 4
+      
+    prod:
+      type: snowflake
+      account: your_account
+      user: your_username
+      password: your_password
+      role: your_role
+      database: your_database
+      warehouse: your_warehouse
+      schema: spotify_analytics_prod
+      threads: 8
