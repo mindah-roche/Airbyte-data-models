@@ -1,0 +1,84 @@
+version: 2
+
+sources:
+  - name: airbyte_raw
+    description: Raw Spotify data synced by Airbyte
+    database: "{{ var('raw_database', target.database) }}"
+    schema: "{{ var('raw_schema', 'airbyte_raw') }}"
+    tables:
+      - name: recently_played
+        description: Raw recently played tracks from Spotify API
+        identifier: _airbyte_raw_recently_played
+        
+      - name: tracks
+        description: Raw track details from Spotify API
+        identifier: _airbyte_raw_tracks
+        
+      - name: artists
+        description: Raw artist details from Spotify API
+        identifier: _airbyte_raw_artists
+        
+      - name: audio_features
+        description: Raw audio features from Spotify API
+        identifier: _airbyte_raw_audio_features
+
+models:
+  - name: stg_spotify__recently_played
+    description: Staging model for recently played tracks - one row per play event
+    columns:
+      - name: play_event_id
+        description: Unique identifier for each play event
+        tests:
+          - unique
+          - not_null
+      - name: played_at
+        description: Timestamp when the track was played
+        tests:
+          - not_null
+      - name: track_id
+        description: Spotify track identifier
+        tests:
+          - not_null
+      - name: artist_id
+        description: Spotify artist identifier
+        
+  - name: stg_spotify__tracks
+    description: Staging model for tracks - one row per track
+    columns:
+      - name: track_id
+        description: Unique Spotify track identifier
+        tests:
+          - unique
+          - not_null
+      - name: track_name
+        description: Name of the track
+      - name: track_popularity
+        description: Popularity score from 0-100
+        
+  - name: stg_spotify__artists
+    description: Staging model for artists - one row per artist
+    columns:
+      - name: artist_id
+        description: Unique Spotify artist identifier
+        tests:
+          - unique
+          - not_null
+      - name: artist_name
+        description: Name of the artist
+      - name: artist_popularity
+        description: Popularity score from 0-100
+        
+  - name: stg_spotify__audio_features
+    description: Staging model for audio features - one row per track
+    columns:
+      - name: track_id
+        description: Unique Spotify track identifier
+        tests:
+          - unique
+          - not_null
+      - name: danceability
+        description: How suitable a track is for dancing (0.0 to 1.0)
+      - name: energy
+        description: Perceptual measure of intensity and activity (0.0 to 1.0)
+      - name: valence
+        description: Musical positiveness conveyed by a track (0.0 to 1.0)
